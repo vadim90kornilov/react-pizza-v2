@@ -1,6 +1,8 @@
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSort } from "../redux/slices/filterSlice";
+import { selectSort, setSort } from "../redux/slices/filterSlice";
 
 export const list = [
   { name: "популярности (DESC)", sortProperty: "rating" },
@@ -13,16 +15,30 @@ export const list = [
 
 function Sort() {
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.filter.sort);
+  const sort = useSelector(selectSort);
+  const sortRef = useRef();
 
   const [open, setOpen] = useState(false);
 
   const onClickListItem = (obj) => {
     dispatch(setSort(obj));
-    setOpen(!open);
+    setOpen(false);
   };
+  // закрытие попап окна с сортировкой по клику в любом месте
+  useEffect(() => {
+    const handlerClickOutside = (event) => {
+      let path = event.composedPath().includes(sortRef.current);
+      if (!path) {
+        setOpen(false);
+      }
+    };
+    document.body.addEventListener("click", handlerClickOutside);
+    return () =>
+      document.body.removeEventListener("click", handlerClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
