@@ -8,6 +8,7 @@ type ListItem = {
   name: string;
   sortProperty: string;
 };
+
 export const list: ListItem[] = [
   { name: "популярности (DESC)", sortProperty: "rating" },
   { name: "популярности (ASK)", sortProperty: "-rating" },
@@ -30,8 +31,9 @@ function Sort() {
   };
   // закрытие попап окна с сортировкой по клику в любом месте
   useEffect(() => {
-    const handlerClickOutside = (event: any) => {
-      let path = event.composedPath().includes(sortRef.current);
+    const handlerClickOutside = (event: MouseEvent) => {
+      let path =
+        sortRef.current && event.composedPath().includes(sortRef.current);
       if (!path) {
         setOpen(false);
       }
