@@ -9,7 +9,7 @@ function Header() {
   const location = useLocation();
 
   const totalCount = items.reduce(
-    (sum: Number, item: any) => sum + item.count,
+    (sum: number, item: any) => sum + item.count,
     0
   );
   return (
